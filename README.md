@@ -1,12 +1,12 @@
-# aws-simple-installer
+# aws-cloudformation-simple-cli
 Command line tool for creating, updating and deleting AWS projects created via CloudFormation.
 
 #Usage
 
-    npm install -g aws-simple-installer
-    aws-cfn-si create --config-file path/to/local-config-file.json [--dry-run true --wait false --environmet test]
-    aws-cfn-si update --config-file path/to/local-config-file.json [--dry-run true --wait false --environmet test]
-    aws-cfn-si delete --config-file path/to/local-config-file.json [--dry-run true --wait false --environmet test]
+    npm install -g aws-cloudformation-simple-cli
+    aws-cfn create --config-file path/to/local-config-file.json [--dry-run true --wait false --environmet test]
+    aws-cfn update --config-file path/to/local-config-file.json [--dry-run true --wait false --environmet test]
+    aws-cfn delete --config-file path/to/local-config-file.json [--dry-run true --wait false --environmet test]
 
 ## Command line options
 
@@ -18,8 +18,8 @@ Command line tool for creating, updating and deleting AWS projects created via C
 The local configuration file describes all CloudFormation request parameters.
 It expects either at least one environment to be defined or a default configuration set.
 
-If an environment is provided and there is a default config st, any settings not defined under the environment
-will be merged with the default set. The environment setting takes precedence.
+If an environment is provided and there is a default config, any settings not defined under the environment
+will be merged with the default set. The environment settings takes precedence.
 
 ### Example
 
