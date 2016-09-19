@@ -1,7 +1,6 @@
 # aws-cloudformation-simple-cli
 [![npm version](https://badge.fury.io/js/aws-cloudformation-simple-cli.svg)](https://badge.fury.io/js/aws-cloudformation-simple-cli)
 [![Build Status](https://travis-ci.org/carlnordenfelt/aws-cloudformation-simple-cli.svg?branch=master)](https://travis-ci.org/carlnordenfelt/aws-cloudformation-simple-cli)
-[![Coverage Status](https://coveralls.io/repos/github/carlnordenfelt/aws-cloudformation-simple-cli/badge.svg)](https://coveralls.io/github/carlnordenfelt/aws-cloudformation-simple-cli)
 
 A simple command line tool for creating, updating and deleting AWS projects created via CloudFormation.
 

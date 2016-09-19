@@ -32,7 +32,6 @@
   "homepage": "https://github.com/carlnordenfelt/aws-cloudformation-simple-cli",
   "devDependencies": {
     "chai": "3.5.0",
-    "coveralls": "2.11.9",
     "eslint": "3.0.1",
     "eslint-config-defaults": "9.0.0",
     "eslint-plugin-filenames": "1.0.0",
