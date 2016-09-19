@@ -1,6 +1,9 @@
 # aws-cloudformation-simple-cli
 Command line tool for creating, updating and deleting AWS projects created via CloudFormation.
 
+This project was created as an alternative to all 'heavy' frameworks being created for launching serverless applications.
+The intention is to provide a lightweight alternative that is very easy to get started with but on the other hand doesn't provide much in terms of functionality.
+
 #Usage
 
     npm install -g aws-cloudformation-simple-cli
