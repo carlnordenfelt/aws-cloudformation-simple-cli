@@ -10,9 +10,9 @@ module.exports = function usage(error) {
     }
 
     if (error.command) {
-        console.log('Usage: aws-si ' + error.command + ' [options]');
+        console.log('Usage: aws-cfn ' + error.command + ' [options]');
     } else {
-        console.log('Usage: aws-si [command] [options]');
+        console.log('Usage: aws-cfn [command] [options]');
     }
     console.log('Available Options:');
     Object.keys(options.getOptions()).forEach(function (optionKey) {
