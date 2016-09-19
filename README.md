@@ -1,4 +1,6 @@
 # aws-cloudformation-simple-cli
+[![npm version](https://badge.fury.io/js/aws-cloudformation-simple-cli.svg)](https://badge.fury.io/js/aws-cloudformation-simple-cli)
+
 Command line tool for creating, updating and deleting AWS projects created via CloudFormation.
 
 This project was created as an alternative to all 'heavy' frameworks being created for launching serverless applications.
