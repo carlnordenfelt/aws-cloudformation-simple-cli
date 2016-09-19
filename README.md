@@ -17,7 +17,7 @@ The intention is to provide a lightweight alternative that is very easy to get s
 
 * `--dry-run`: Set to true if you want to preview the CloudFormation request. Default is `false`.
 * `--wait`: Set to true if you want the client to wait for the operation to complete before returning. Default is `true`.
-* `--environment` Switch between environments in the local config file. See [Configuration](#Configuration) for more details. Default is `none`.
+* `--environment`: Switch between environments in the local config file. See [Configuration](#Configuration) for more details. Default is `none`.
 
 ## Configuration
 The local configuration file describes all CloudFormation request parameters.
@@ -25,6 +25,8 @@ It expects either at least one environment to be defined or a default configurat
 
 If an environment is provided and there is a default config, any settings not defined under the environment
 will be merged with the default set. The environment settings takes precedence.
+
+See the [CloudFormation docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/CloudFormation.html) for available configuration properties.
 
 ### Example
 
