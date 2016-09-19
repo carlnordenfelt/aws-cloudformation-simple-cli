@@ -67,6 +67,7 @@ coverage: deps
 
 .PHONY: package
 package: deps test
+	npm prune --production
 	npm publish
 
 
