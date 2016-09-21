@@ -63,6 +63,6 @@ These params, and which takes precedence if both are provided are listed below.
 
 ## Changelog
 
-#v0.1.0
+###v0.1.0
 * Added support for placeholder arguments
 * Stricter argument validation
