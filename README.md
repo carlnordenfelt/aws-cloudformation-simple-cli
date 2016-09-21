@@ -60,3 +60,9 @@ These params, and which takes precedence if both are provided are listed below.
 * `StackPolicyDuringUpdateURL` & `StackPolicyDuringUpdateBody`. `StackPolicyDuringUpdateURL` takes precedence.
 * `TemplateURL` & `TemplateBody`. `TemplateURL` takes precedence.
 * `OnFailure` & `DisableRollback`. `OnFailure` takes precedence.
+
+## Changelog
+
+#v0.1.0
+* Added support for placeholder arguments
+* Stricter argument validation
