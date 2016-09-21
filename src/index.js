@@ -9,7 +9,11 @@ var commands = require('./lib/commands');
 var usage = require('./lib/usage');
 
 /* istanbul ignore next */
-var providedOptions = new Options(process.argv);
+try {
+    var providedOptions = new Options(process.argv);
+} catch (error) {
+    usage(error);
+}
 /* istanbul ignore next */
 commands.run(providedOptions, function (error, response) {
     if (error) {

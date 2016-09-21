@@ -53,14 +53,6 @@ describe('Commands', function () {
                 done();
             });
         });
-        it('should fail if validation fails', function (done) {
-            var options = new Options(['node', 'script', 'create']);
-            subject.run(options, function (error, result) {
-                expect(error.message).to.contain('Missing argument');
-                expect(result).to.equal(undefined);
-                done();
-            });
-        });
     });
 
     describe('update', function () {
@@ -77,14 +69,6 @@ describe('Commands', function () {
             runStub.yields('RunError');
             subject.run(options, function (error, result) {
                 expect(error).to.equal('RunError');
-                expect(result).to.equal(undefined);
-                done();
-            });
-        });
-        it('should fail if validation fails', function (done) {
-            var options = new Options(['node', 'script', 'update']);
-            subject.run(options, function (error, result) {
-                expect(error.message).to.contain('Missing argument');
                 expect(result).to.equal(undefined);
                 done();
             });
@@ -109,19 +93,11 @@ describe('Commands', function () {
                 done();
             });
         });
-        it('should fail if validation fails', function (done) {
-            var options = new Options(['node', 'script', 'delete']);
-            subject.run(options, function (error, result) {
-                expect(error.message).to.contain('Missing argument');
-                expect(result).to.equal(undefined);
-                done();
-            });
-        });
     });
 
     describe('invalid command', function () {
-        it('should fail on help', function (done) {
-            var options = new Options(['node', 'script', 'dummy']);
+        it('should fail on invalid command', function (done) {
+            var options = new Options(['node', 'script', 'help']);
             subject.run(options, function (error, result) {
                 expect(error.command).to.equal('help');
                 expect(result).to.equal(undefined);

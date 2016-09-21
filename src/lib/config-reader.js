@@ -3,7 +3,9 @@ var fileHelper = require('./file-helper');
 var _ = require('lodash');
 
 module.exports = function getConfig(options) {
-    var configFile = JSON.parse(fileHelper.read(options.get('config-file')));
+    var rawConfig = fileHelper.read(options.getConfigFile()).toString();
+    rawConfig = processPlaceholders(rawConfig, options.getPlaceholders());
+    var configFile = JSON.parse(rawConfig);
     var config;
     if (options.getEnvironment()) {
         if (!configFile[options.getEnvironment()]) {
@@ -21,3 +23,14 @@ module.exports = function getConfig(options) {
     }
     return config;
 };
+
+function processPlaceholders(rawConfig, placeholders) {
+    var placeholderKeys = Object.keys(placeholders);
+    //console.log('rawConfig', placeholders)
+    for (var i = 0; i < placeholderKeys.length; i++) {
+        var regexp = new RegExp(placeholderKeys[i], 'g');
+        console.log(regexp, placeholders[placeholderKeys[i]]);
+        rawConfig = rawConfig.replace(regexp, placeholders[placeholderKeys[i]]);
+    }
+    return rawConfig;
+}

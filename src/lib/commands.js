@@ -8,34 +8,16 @@ var pub = {};
 pub.run = function run(options, callback) {
     switch (options.getCommand()) {
         case 'create':
-            try {
-                options.validate(createStack.options);
-                createStack.run(options, callback);
-            } catch (error) {
-                error.command = 'create';
-                callback(error);
-            }
+            createStack.run(options, callback);
             break;
         case 'update':
-            try {
-                options.validate(updateStack.options);
-                updateStack.run(options, callback);
-            } catch (error) {
-                error.command = 'update';
-                callback(error);
-            }
+            updateStack.run(options, callback);
             break;
         case 'delete':
-            try {
-                options.validate(deleteStack.options);
-                deleteStack.run(options, callback);
-            } catch (error) {
-                error.command = 'delete';
-                callback(error);
-            }
+            deleteStack.run(options, callback);
             break;
-        default:
-            callback({ message: 'Invalid command given. Must be one of create, update or delete', command: 'help' });
+        case 'help':
+            callback({});
             break;
     }
 };

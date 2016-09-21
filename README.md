@@ -7,18 +7,19 @@ A simple command line tool for creating, updating and deleting AWS projects crea
 This project was created as an alternative to all 'heavy' frameworks being created for launching serverless applications.
 The intention is to provide a lightweight alternative that is very easy to get started with but on the other hand doesn't provide much in terms of functionality.
 
-#Usage
+#Examples
 
     npm install -g aws-cloudformation-simple-cli
-    aws-cfn create --config-file path/to/local-config-file.json [--dry-run true --wait false --environmet test]
-    aws-cfn update --config-file path/to/local-config-file.json [--dry-run true --wait false --environmet test]
-    aws-cfn delete --config-file path/to/local-config-file.json [--dry-run true --wait false --environmet test]
+    aws-cfn create --config-file path/to/local-config-file.json --placeholder {PH1}=RP1 --placeholder $PH2$=RP2 --wait false
+    aws-cfn update --config-file path/to/local-config-file.json --dry-run true --environment test
+    aws-cfn delete --config-file path/to/local-config-file.json --wait false
 
-## Command line options
+## Optional Command line options
 
 * `--dry-run`: Set to true if you want to preview the CloudFormation request. Default is `false`.
 * `--wait`: Set to true if you want the client to wait for the operation to complete before returning. Default is `true`.
 * `--environment`: Switch between environments in the local config file. See [Configuration](#Configuration) for more details. Default is `none`.
+* `--placeholder`: Placeholders for replacement of values in the config.json file. You can supply multiple placeholder arguments. Each placeholder is globally replaced. Syntax: `PlaceholderString=ReplacementValue`.
 
 ## Configuration
 The local configuration file describes all CloudFormation request parameters.

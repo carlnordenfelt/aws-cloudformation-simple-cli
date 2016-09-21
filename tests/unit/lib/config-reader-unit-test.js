@@ -32,7 +32,7 @@ describe('ConfigReader', function () {
                     'MyTemplateParamKey': 'MyTemplateParamValue',
                     'MyOtherTemplateParamKey': 'MyOtherTemplateParamValue'
                 },
-                'TemplateBody': 'path/to/my-local-cloudformation.template',
+                'TemplateBody': 'path/to/{ph1}/{ph1}/{ph2}/my-local-cloudformation.template',
                 'Capabilities': [
                     'CAPABILITY_IAM'
                 ]
@@ -54,12 +54,12 @@ describe('ConfigReader', function () {
     });
     describe('getConfig', function () {
         it('should succeed with defaults only', function (done) {
-            var options = new Options(['node', 'script', 'create', '--config-file', 'path/test.json']);
+            var options = new Options(['node', 'script', 'create', '--config-file', 'path/test.json', '--placeholder', '{ph1}=rh1', '--placeholder', '{ph2}=rh2']);
             var config = subject(options);
             expect(config.StackName).to.equal('DefaultStackName');
             expect(config.Parameters.MyTemplateParamKey).to.equal('MyTemplateParamValue');
             expect(config.Parameters.MyOtherTemplateParamKey).to.equal('MyOtherTemplateParamValue');
-            expect(config.TemplateBody).to.equal('path/to/my-local-cloudformation.template');
+            expect(config.TemplateBody).to.equal('path/to/rh1/rh1/rh2/my-local-cloudformation.template');
             done();
         });
         it('should succeed with environment overrides', function (done) {
