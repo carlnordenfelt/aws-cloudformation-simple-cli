@@ -77,7 +77,7 @@ Options.prototype.validate = function validate() {
     if (!this.command) {
         throw new Error('Missing command argument');
     } else if (Options.getValidCommands().indexOf(this.command) === -1) {
-        throw new Error('Invalid command argument');
+        throw new Error('Invalid command argument: ' + this.command);
     } else if (!this.configFile && this.command !== 'help') {
         throw new Error('Missing argument: --config-file is required');
     }

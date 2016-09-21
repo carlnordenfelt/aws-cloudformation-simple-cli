@@ -16,7 +16,7 @@ pub.run = function run(options, callback) {
         case 'delete':
             deleteStack.run(options, callback);
             break;
-        case 'help':
+        default:
             callback({});
             break;
     }

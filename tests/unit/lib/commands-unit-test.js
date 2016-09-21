@@ -99,7 +99,7 @@ describe('Commands', function () {
         it('should fail on invalid command', function (done) {
             var options = new Options(['node', 'script', 'help']);
             subject.run(options, function (error, result) {
-                expect(error.command).to.equal('help');
+                expect(error.message).to.equal(undefined);
                 expect(result).to.equal(undefined);
                 done();
             });

@@ -26,10 +26,8 @@ module.exports = function getConfig(options) {
 
 function processPlaceholders(rawConfig, placeholders) {
     var placeholderKeys = Object.keys(placeholders);
-    //console.log('rawConfig', placeholders)
     for (var i = 0; i < placeholderKeys.length; i++) {
         var regexp = new RegExp(placeholderKeys[i], 'g');
-        console.log(regexp, placeholders[placeholderKeys[i]]);
         rawConfig = rawConfig.replace(regexp, placeholders[placeholderKeys[i]]);
     }
     return rawConfig;
