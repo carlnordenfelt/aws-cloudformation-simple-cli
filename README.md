@@ -63,6 +63,9 @@ These params, and which takes precedence if both are provided are listed below.
 
 ## Changelog
 
+###v0.1.1
+* Added response message when update is not executed because there are no changes
+
 ###v0.1.0
 * Added support for placeholder arguments
 * Stricter argument validation
