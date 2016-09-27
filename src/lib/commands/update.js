@@ -8,7 +8,6 @@ var configReader = require('../config-reader');
 module.exports = {
     run: function run(options, callback) {
         var config = configReader(options);
-        console.log(config);
         var params = buildParameters(config);
         if (options.isDryRun()) {
             console.log('Dry run mode');
@@ -19,7 +18,7 @@ module.exports = {
         cloudFormation.updateStack(params, function (error, data) {
             if (error) {
                 if (error.message === 'No updates are to be performed.') {
-                    return callback(null);
+                    return callback(null, error.message);
                 }
                 return callback(error);
             }

@@ -89,8 +89,9 @@ describe('Update', function () {
         it('should not fail', function (done) {
             var options = new Options(['node', 'script', 'update', '--config-file', 'dummy']);
             updateStackStub.yields({ message: 'No updates are to be performed.' });
-            subject.run(options, function (error) {
+            subject.run(options, function (error, response) {
                 expect(error).to.equal(null);
+                expect(response).to.equal('No updates are to be performed.');
                 done();
             });
         });
