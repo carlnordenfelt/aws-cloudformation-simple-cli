@@ -2,7 +2,7 @@
   "name": "aws-cloudformation-simple-cli",
   "author": "carl@bynordenfelt.se",
   "description": "A simple command line tool for managing CloudFormation stacks",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "preferGlobal": true,
   "scripts": {

@@ -2,7 +2,7 @@
 'use strict';
 
 /* istanbul ignore next */
-var Options = require('./lib/Options');
+var Options = require('./lib/options');
 /* istanbul ignore next */
 var commands = require('./lib/commands');
 /* istanbul ignore next */
