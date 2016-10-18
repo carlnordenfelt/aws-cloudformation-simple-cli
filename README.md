@@ -63,9 +63,20 @@ These params, and which takes precedence if both are provided are listed below.
 
 ## Changelog
 
+###v0.1.2
+* Bugfix: Incorrect casing on options.js require in index.js
+
 ###v0.1.1
 * Added response message when update is not executed because there are no changes
 
 ###v0.1.0
 * Added support for placeholder arguments
 * Stricter argument validation
+
+## Publishing
+Notes for the maintainer only.
+
+* Update package.json version
+* git tag -a version -m "" && git push --follow-tags
+* npm publish
+
