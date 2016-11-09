@@ -42,7 +42,7 @@ function Options(args) {
 }
 
 Options.getValidCommands = function () {
-    return ['create', 'update', 'delete', 'help'];
+    return ['create', 'update', 'createOrUpdate', 'delete', 'help'];
 };
 /* istanbul ignore next */
 Options.getValidOptions = function () {

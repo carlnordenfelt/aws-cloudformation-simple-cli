@@ -23,6 +23,7 @@ describe('Commands', function () {
 
         mockery.registerMock('./commands/create', commandMock);
         mockery.registerMock('./commands/update', commandMock);
+        mockery.registerMock('./commands/create-or-update', commandMock);
         mockery.registerMock('./commands/delete', commandMock);
         subject = require('../../../src/lib/commands');
     });
@@ -57,7 +58,7 @@ describe('Commands', function () {
 
     describe('update', function () {
         it('should succeed', function (done) {
-            var options = new Options(['node', 'script', 'create', '--config-file', 'dummy']);
+            var options = new Options(['node', 'script', 'update', '--config-file', 'dummy']);
             subject.run(options, function (error, result) {
                 expect(error).to.equal(null);
                 expect(result).to.be.an('object');
@@ -66,6 +67,26 @@ describe('Commands', function () {
         });
         it('should fail due to run error', function (done) {
             var options = new Options(['node', 'script', 'update', '--config-file', 'dummy']);
+            runStub.yields('RunError');
+            subject.run(options, function (error, result) {
+                expect(error).to.equal('RunError');
+                expect(result).to.equal(undefined);
+                done();
+            });
+        });
+    });
+
+    describe('create-or-update', function () {
+        it('should succeed', function (done) {
+            var options = new Options(['node', 'script', 'createOrUpdate', '--config-file', 'dummy']);
+            subject.run(options, function (error, result) {
+                expect(error).to.equal(null);
+                expect(result).to.be.an('object');
+                done();
+            });
+        });
+        it('should fail due to run error', function (done) {
+            var options = new Options(['node', 'script', 'createOrUpdate', '--config-file', 'dummy']);
             runStub.yields('RunError');
             subject.run(options, function (error, result) {
                 expect(error).to.equal('RunError');

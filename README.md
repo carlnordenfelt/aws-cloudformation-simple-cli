@@ -7,14 +7,18 @@ A simple command line tool for creating, updating and deleting AWS projects crea
 This project was created as an alternative to all 'heavy' frameworks being created for launching serverless applications.
 The intention is to provide a lightweight alternative that is very easy to get started with but on the other hand doesn't provide much in terms of functionality.
 
-#Examples
+## Installation
 
     npm install -g aws-cloudformation-simple-cli
+
+## Examples
+
     aws-cfn create --config-file path/to/local-config-file.json --placeholder {PH1}=RP1 --placeholder $PH2$=RP2 --wait false
     aws-cfn update --config-file path/to/local-config-file.json --dry-run true --environment test
+    aws-cfn createOrUpdate --config-file path/to/local-config-file.json --dry-run true --environment test
     aws-cfn delete --config-file path/to/local-config-file.json --wait false
 
-## Optional Command line options
+### Optional Command line options
 
 * `--dry-run`: Set to true if you want to preview the CloudFormation request. Default is `false`.
 * `--wait`: Set to true if you want the client to wait for the operation to complete before returning. Default is `true`.
@@ -30,7 +34,7 @@ will be merged with the default set. The environment settings takes precedence.
 
 See the [CloudFormation docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/CloudFormation.html) for available configuration properties.
 
-### Example
+### Configuration Example
 
     {
         "default": {
@@ -63,13 +67,16 @@ These params, and which takes precedence if both are provided are listed below.
 
 ## Changelog
 
-###v0.1.2
+### v0.2.0
+* Added `createOrUpdate` command which will either create or update the stack depending on wether it exists or not.
+
+### v0.1.2
 * Bugfix: Incorrect casing on options.js require in index.js
 
-###v0.1.1
+### v0.1.1
 * Added response message when update is not executed because there are no changes
 
-###v0.1.0
+### v0.1.0
 * Added support for placeholder arguments
 * Stricter argument validation
 
