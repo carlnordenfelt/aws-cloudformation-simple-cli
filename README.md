@@ -67,6 +67,9 @@ These params, and which takes precedence if both are provided are listed below.
 
 ## Changelog
 
+### v0.2.1
+* Bugfix: Switched create vs update commands in createOrUpdate
+
 ### v0.2.0
 * Added `createOrUpdate` command which will either create or update the stack depending on wether it exists or not.
 
