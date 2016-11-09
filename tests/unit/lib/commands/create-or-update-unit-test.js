@@ -54,19 +54,7 @@ describe('Update', function () {
     });
 
     describe('run', function () {
-        it('should create stack', function (done) {
-            var options = new Options(['node', 'script', 'createOrUpdate', '--config-file', 'dummy']);
-            subject.run(options, function (error, result) {
-                expect(error).to.equal(null);
-                expect(result).to.be.an('object');
-                expect(describeStacksStub.calledOnce).to.equal(true);
-                expect(createStub.calledOnce).to.equal(true);
-                expect(updateStub.called).to.equal(false);
-                done();
-            });
-        });
         it('should update stack', function (done) {
-            describeStacksStub.yields(new Error('Stack does not exist'));
             var options = new Options(['node', 'script', 'createOrUpdate', '--config-file', 'dummy']);
             subject.run(options, function (error, result) {
                 expect(error).to.equal(null);
@@ -74,6 +62,18 @@ describe('Update', function () {
                 expect(describeStacksStub.calledOnce).to.equal(true);
                 expect(createStub.called).to.equal(false);
                 expect(updateStub.calledOnce).to.equal(true);
+                done();
+            });
+        });
+        it('should create stack', function (done) {
+            describeStacksStub.yields(new Error('Stack does not exist'));
+            var options = new Options(['node', 'script', 'createOrUpdate', '--config-file', 'dummy']);
+            subject.run(options, function (error, result) {
+                expect(error).to.equal(null);
+                expect(result).to.be.an('object');
+                expect(describeStacksStub.calledOnce).to.equal(true);
+                expect(createStub.calledOnce).to.equal(true);
+                expect(updateStub.called).to.equal(false);
                 done();
             });
         });

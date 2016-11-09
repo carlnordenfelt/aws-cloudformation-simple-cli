@@ -21,9 +21,9 @@ module.exports = {
             }
 
             if (response && response.Stacks && response.Stacks.length > 0) {
-                return create.run(options, callback);
+                return update.run(options, callback);
             }
-            return update.run(options, callback);
+            return create.run(options, callback);
         });
     }
 };
