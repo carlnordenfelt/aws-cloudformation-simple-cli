@@ -1,29 +1,18 @@
-'use strict';
+const createChangeSet = require('./commands/create-change-set');
+const deleteStack     = require('./commands/delete');
 
-var createOrUpdateStack = require('./commands/create-or-update');
-var createStack = require('./commands/create');
-var updateStack = require('./commands/update');
-var deleteStack = require('./commands/delete');
-var pub = {};
-
-pub.run = function run(options, callback) {
+/* eslint-disable no-fallthrough */
+module.exports = async function (options) {
     switch (options.getCommand()) {
-        case 'createOrUpdate':
-            createOrUpdateStack.run(options, callback);
-            break;
+        /*istanbul ignore next */
         case 'create':
-            createStack.run(options, callback);
-            break;
+        /*istanbul ignore next */
+        case 'createOrUpdate':
         case 'update':
-            updateStack.run(options, callback);
-            break;
+            return await createChangeSet(options);
         case 'delete':
-            deleteStack.run(options, callback);
-            break;
+            return await deleteStack(options);
         default:
-            callback({});
-            break;
+            throw new Error('Invalid command provided: ' + options.getCommand());
     }
 };
-
-module.exports = pub;

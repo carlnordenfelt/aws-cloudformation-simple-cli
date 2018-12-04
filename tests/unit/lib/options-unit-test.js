@@ -1,18 +1,21 @@
-'use strict';
-
-var expect = require('chai').expect;
+const expect = require('chai').expect;
 
 describe('Options', function () {
-    var subject;
+    let subject;
 
     before(function () {
         subject = require('../../../src/lib/options');
     });
     describe('Parse options', function () {
         it('should succeed', function (done) {
-            var options = new subject([
-                'node', 'script', 'create', '--dry-run', 'true', '--wait', 'false', '--environment',
-                'test', '--config-file', 'path/test.json', '--placeholder', 'ph1=rp1', '--placeholder', 'ph2=rp2'
+            const options = new subject([
+                'node', 'script', 'create',
+                '--dry-run', 'true',
+                '--wait', 'false',
+                '--environment', 'test',
+                '--config-file', 'path/test.json',
+                '--placeholder', 'ph1=rp1',
+                '--placeholder', 'ph2=rp2'
             ]);
             expect(options.getCommand()).to.equal('create');
             expect(options.isDryRun()).to.equal(true);

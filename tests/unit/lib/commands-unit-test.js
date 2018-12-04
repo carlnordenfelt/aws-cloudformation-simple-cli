@@ -1,13 +1,11 @@
-'use strict';
-
-var expect = require('chai').expect;
-var mockery = require('mockery');
-var sinon = require('sinon');
-var Options = require('../../../src/lib/options');
+const expect  = require('chai').expect;
+const mockery = require('mockery');
+const sinon   = require('sinon');
+const Options = require('../../../src/lib/options');
 
 describe('Commands', function () {
-    var subject;
-    var runStub;
+    let subject;
+    let commandStub = sinon.stub();
 
     before(function () {
         mockery.enable({
@@ -15,82 +13,32 @@ describe('Commands', function () {
             warnOnUnregistered: false
         });
 
-        runStub = sinon.stub();
-
-        var commandMock = {
-            run: runStub
-        };
-
-        mockery.registerMock('./commands/create', commandMock);
-        mockery.registerMock('./commands/update', commandMock);
-        mockery.registerMock('./commands/create-or-update', commandMock);
-        mockery.registerMock('./commands/delete', commandMock);
+        mockery.registerMock('./commands/create-change-set', commandStub);
+        mockery.registerMock('./commands/delete', commandStub);
         subject = require('../../../src/lib/commands');
     });
     beforeEach(function () {
-        runStub.reset().resetBehavior();
-        runStub.yields(null, {});
+        commandStub.reset();
+        commandStub.returns({});
     });
     after(function () {
         mockery.deregisterAll();
         mockery.disable();
     });
 
-    describe('create', function () {
-        it('should succeed', function (done) {
-            var options = new Options(['node', 'script', 'create', '--config-file', 'dummy']);
-            subject.run(options, function (error, result) {
-                expect(error).to.equal(null);
-                expect(result).to.be.an('object');
-                done();
-            });
-        });
-        it('should fail due to run error', function (done) {
-            var options = new Options(['node', 'script', 'create', '--config-file', 'dummy']);
-            runStub.yields('RunError');
-            subject.run(options, function (error, result) {
-                expect(error).to.equal('RunError');
-                expect(result).to.equal(undefined);
-                done();
-            });
-        });
-    });
-
     describe('update', function () {
         it('should succeed', function (done) {
-            var options = new Options(['node', 'script', 'update', '--config-file', 'dummy']);
-            subject.run(options, function (error, result) {
-                expect(error).to.equal(null);
+            const options = new Options(['node', 'script', 'update', '--config-file', 'dummy']);
+            subject(options).then(result => {
                 expect(result).to.be.an('object');
                 done();
             });
         });
         it('should fail due to run error', function (done) {
-            var options = new Options(['node', 'script', 'update', '--config-file', 'dummy']);
-            runStub.yields('RunError');
-            subject.run(options, function (error, result) {
-                expect(error).to.equal('RunError');
-                expect(result).to.equal(undefined);
-                done();
-            });
-        });
-    });
-
-    describe('create-or-update', function () {
-        it('should succeed', function (done) {
-            var options = new Options(['node', 'script', 'createOrUpdate', '--config-file', 'dummy']);
-            subject.run(options, function (error, result) {
-                expect(error).to.equal(null);
-                expect(result).to.be.an('object');
-                done();
-            });
-        });
-        it('should fail due to run error', function (done) {
-            var options = new Options(['node', 'script', 'createOrUpdate', '--config-file', 'dummy']);
-            runStub.yields('RunError');
-            subject.run(options, function (error, result) {
-                expect(error).to.equal('RunError');
-                expect(result).to.equal(undefined);
+            const options = new Options(['node', 'script', 'update', '--config-file', 'dummy']);
+            commandStub.throws(new Error('foobar'));
+            subject(options).catch(error => {
+                expect(error.message).to.equal('foobar');
                 done();
             });
         });
@@ -98,19 +46,17 @@ describe('Commands', function () {
 
     describe('delete', function () {
         it('should succeed', function (done) {
-            var options = new Options(['node', 'script', 'delete', '--config-file', 'dummy']);
-            subject.run(options, function (error, result) {
-                expect(error).to.equal(null);
+            const options = new Options(['node', 'script', 'delete', '--config-file', 'dummy']);
+            subject(options).then(result => {
                 expect(result).to.be.an('object');
                 done();
             });
         });
         it('should fail due to run error', function (done) {
-            var options = new Options(['node', 'script', 'delete', '--config-file', 'dummy']);
-            runStub.yields('RunError');
-            subject.run(options, function (error, result) {
-                expect(error).to.equal('RunError');
-                expect(result).to.equal(undefined);
+            const options = new Options(['node', 'script', 'delete', '--config-file', 'dummy']);
+            commandStub.throws(new Error('foobar'));
+            subject(options).catch(error => {
+                expect(error.message).to.equal('foobar');
                 done();
             });
         });
@@ -118,10 +64,9 @@ describe('Commands', function () {
 
     describe('invalid command', function () {
         it('should fail on invalid command', function (done) {
-            var options = new Options(['node', 'script', 'help']);
-            subject.run(options, function (error, result) {
-                expect(error.message).to.equal(undefined);
-                expect(result).to.equal(undefined);
+            const options = new Options(['node', 'script', 'help']);
+            subject(options).catch(error => {
+                expect(error.message).to.equal('Invalid command provided: help');
                 done();
             });
         });

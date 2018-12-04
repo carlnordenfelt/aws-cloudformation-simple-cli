@@ -1,16 +1,25 @@
-'use strict';
-var fileHelper = require('./file-helper');
-var _ = require('lodash');
+const fileHelper = require('./read-file');
+const _          = require('lodash');
+const log        = require('log4njs');
 
 module.exports = function getConfig(options) {
-    var rawConfig = fileHelper.read(options.getConfigFile()).toString();
-    rawConfig = processPlaceholders(rawConfig, options.getPlaceholders());
-    var configFile = JSON.parse(rawConfig);
-    var config;
+    let configFile;
+    try {
+        let rawConfig = fileHelper(options.getConfigFile()).toString();
+        rawConfig     = processPlaceholders(rawConfig, options.getPlaceholders());
+        configFile    = JSON.parse(rawConfig);
+    } catch (error) {
+        log.error('Unable to read config file', error);
+        throw error;
+    }
+
+    let config;
+
     if (options.getEnvironment()) {
         if (!configFile[options.getEnvironment()]) {
             throw new Error('Environment not defined in config file: ' + options.getEnvironment());
         }
+
         config = configFile[options.getEnvironment()];
         if (configFile.default) {
             config = _.merge(configFile.default, config);
@@ -21,14 +30,15 @@ module.exports = function getConfig(options) {
         }
         config = configFile.default;
     }
+
     return config;
 };
 
 function processPlaceholders(rawConfig, placeholders) {
-    var placeholderKeys = Object.keys(placeholders);
-    for (var i = 0; i < placeholderKeys.length; i++) {
-        var regexp = new RegExp(placeholderKeys[i], 'g');
-        rawConfig = rawConfig.replace(regexp, placeholders[placeholderKeys[i]]);
+    const placeholderKeys = Object.keys(placeholders);
+    for (let i = 0; i < placeholderKeys.length; i++) {
+        const regexp = new RegExp(placeholderKeys[i], 'g');
+        rawConfig    = rawConfig.replace(regexp, placeholders[placeholderKeys[i]]);
     }
     return rawConfig;
 }

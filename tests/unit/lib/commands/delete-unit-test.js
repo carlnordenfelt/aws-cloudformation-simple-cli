@@ -1,16 +1,14 @@
-'use strict';
-
-var expect = require('chai').expect;
-var mockery = require('mockery');
-var sinon = require('sinon');
-var Options = require('../../../../src/lib/options');
+const expect  = require('chai').expect;
+const mockery = require('mockery');
+const sinon   = require('sinon');
+const Options = require('../../../../src/lib/options');
 
 describe('Delete', function () {
-    var subject;
-    var deleteStackStub = sinon.stub();
-    var waitForStub = sinon.stub();
-    var fileHelperReadStub = sinon.stub();
-    var configReaderStub = sinon.stub();
+    let subject;
+    const deleteStackStub  = sinon.stub();
+    const waitForStub      = sinon.stub();
+    const readStub         = sinon.stub();
+    const configReaderStub = sinon.stub();
 
     before(function () {
         mockery.enable({
@@ -18,29 +16,37 @@ describe('Delete', function () {
             warnOnUnregistered: false
         });
 
-        var awsSdkMock = {
+        const awsSdkMock = {
             CloudFormation: function () {
                 this.deleteStack = deleteStackStub;
-                this.waitFor = waitForStub;
+                this.waitFor     = waitForStub;
             }
-        };
-        var fileHelperMock = {
-            read: fileHelperReadStub
         };
 
         mockery.registerMock('aws-sdk', awsSdkMock);
         mockery.registerMock('../config-reader', configReaderStub);
-        mockery.registerMock('../file-helper', fileHelperMock);
+        mockery.registerMock('../read-file', readStub);
         subject = require('../../../../src/lib/commands/delete');
     });
     beforeEach(function () {
-        deleteStackStub.reset().resetBehavior();
-        deleteStackStub.yields(null, {});
-        waitForStub.reset().resetBehavior();
-        waitForStub.yields(null, {});
-        fileHelperReadStub.reset().resetBehavior();
-        fileHelperReadStub.returns(JSON.stringify({}));
-        configReaderStub.reset().resetBehavior();
+        deleteStackStub.reset();
+        deleteStackStub.returns({
+            promise: () => {
+                return {};
+            }
+        });
+
+        waitForStub.reset();
+        waitForStub.returns({
+            promise: () => {
+                return {};
+            }
+        });
+
+        readStub.reset();
+        readStub.returns(JSON.stringify({}));
+
+        configReaderStub.reset();
         configReaderStub.returns({});
     });
     after(function () {
@@ -50,9 +56,8 @@ describe('Delete', function () {
 
     describe('run', function () {
         it('should succeed', function (done) {
-            var options = new Options(['node', 'script', 'delete', '--config-file', 'dummy']);
-            subject.run(options, function (error, result) {
-                expect(error).to.equal(null);
+            const options = new Options(['node', 'script', 'delete', '--config-file', 'dummy']);
+            subject(options).then(result => {
                 expect(result).to.be.an('object');
                 expect(deleteStackStub.calledOnce).to.equal(true);
                 expect(waitForStub.calledOnce).to.equal(true);
@@ -60,9 +65,8 @@ describe('Delete', function () {
             });
         });
         it('should succeed without wait', function (done) {
-            var options = new Options(['node', 'script', 'delete', '--config-file', 'dummy', '--wait', 'false']);
-            subject.run(options, function (error, result) {
-                expect(error).to.equal(null);
+            const options = new Options(['node', 'script', 'delete', '--config-file', 'dummy', '--wait', 'false']);
+            subject(options).then(result => {
                 expect(result).to.be.an('object');
                 expect(deleteStackStub.calledOnce).to.equal(true);
                 expect(waitForStub.called).to.equal(false);
@@ -70,19 +74,22 @@ describe('Delete', function () {
             });
         });
         it('should succeed, dry run only', function (done) {
-            var options = new Options(['node', 'script', 'delete', '--config-file', 'dummy', '--dry-run', 'true']);
-            subject.run(options, function (error, result) {
-                expect(error).to.equal(null);
-                expect(result).to.equal(null);
+            const options = new Options(['node', 'script', 'delete', '--config-file', 'dummy', '--dry-run', 'true']);
+            subject(options).then(result => {
+                expect(result).to.equal(undefined);
                 expect(deleteStackStub.called).to.equal(false);
                 done();
             });
         });
         it('should fail', function (done) {
-            var options = new Options(['node', 'script', 'delete', '--config-file', 'dummy']);
-            deleteStackStub.yields('deleteStackStub');
-            subject.run(options, function (error) {
-                expect(error).to.equal('deleteStackStub');
+            deleteStackStub.returns({
+                promise: () => {
+                    throw new Error('deleteStackStub');
+                }
+            });
+            const options = new Options(['node', 'script', 'delete', '--config-file', 'dummy']);
+            subject(options).catch(error => {
+                expect(error.message).to.equal('deleteStackStub');
                 done();
             });
         });

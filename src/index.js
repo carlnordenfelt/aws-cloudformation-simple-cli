@@ -1,26 +1,27 @@
 #! /usr/bin/env node
-'use strict';
+/* istanbul ignore file */
+const log = require('log4njs');
 
-/* istanbul ignore next */
-var Options = require('./lib/options');
-/* istanbul ignore next */
-var commands = require('./lib/commands');
-/* istanbul ignore next */
-var usage = require('./lib/usage');
+const Options  = require('./lib/options');
+const commands = require('./lib/commands');
+const usage    = require('./lib/usage');
 
-/* istanbul ignore next */
-var providedOptions;
-/* istanbul ignore next */
+let providedOptions;
 try {
-    providedOptions= new Options(process.argv);
+    providedOptions = new Options(process.argv);
 } catch (error) {
-    usage(error);
+    log.error('Invalid arguments', error);
+    usage();
+    process.exit(1);
 }
-/* istanbul ignore next */
-commands.run(providedOptions, function (error, response) {
-    if (error) {
-        usage(error);
-    } else {
-        console.log('[Response]', response);
-    }
-});
+
+commands(providedOptions)
+    .then(response => {
+        if (response) {
+            log.info('Response', response);
+        }
+        log.info('Update completed');
+    })
+    .catch(error => {
+        log.error('Error during execution', error);
+    });

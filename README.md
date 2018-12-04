@@ -1,6 +1,7 @@
 # aws-cloudformation-simple-cli
 [![npm version](https://badge.fury.io/js/aws-cloudformation-simple-cli.svg)](https://badge.fury.io/js/aws-cloudformation-simple-cli)
 [![Build Status](https://travis-ci.org/carlnordenfelt/aws-cloudformation-simple-cli.svg?branch=master)](https://travis-ci.org/carlnordenfelt/aws-cloudformation-simple-cli)
+[![Coverage Status](https://coveralls.io/repos/github/carlnordenfelt/aws-cloudformation-simple-cli/badge.svg?branch=master)](https://coveralls.io/github/carlnordenfelt/aws-cloudformation-simple-cli?branch=master)
 
 A simple command line tool for creating, updating and deleting AWS projects created via CloudFormation.
 
@@ -8,14 +9,11 @@ This project was created as an alternative to all 'heavy' frameworks being creat
 The intention is to provide a lightweight alternative that is very easy to get started with but on the other hand doesn't provide much in terms of functionality.
 
 ## Installation
-
     npm install -g aws-cloudformation-simple-cli
 
 ## Examples
-
-    aws-cfn create --config-file path/to/local-config-file.json --placeholder {PH1}=RP1 --placeholder $PH2$=RP2 --wait false
+    aws-cfn update --config-file path/to/local-config-file.json --placeholder {PH1}=RP1 --placeholder $PH2$=RP2 --wait false
     aws-cfn update --config-file path/to/local-config-file.json --dry-run true --environment test
-    aws-cfn createOrUpdate --config-file path/to/local-config-file.json --dry-run true --environment test
     aws-cfn delete --config-file path/to/local-config-file.json --wait false
 
 ### Optional Command line options
@@ -27,15 +25,14 @@ The intention is to provide a lightweight alternative that is very easy to get s
 
 ## Configuration
 The local configuration file describes all CloudFormation request parameters.
-It expects either at least one environment to be defined or a default configuration set.
+It expects either at least one environment to be defined or a `default` configuration set.
 
 If an environment is provided and there is a default config, any settings not defined under the environment
 will be merged with the default set. The environment settings takes precedence.
 
-See the [CloudFormation docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/CloudFormation.html) for available configuration properties.
+See the [CloudFormation docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/CloudFormation.html#createChangeSet-property) for available configuration properties.
 
 ### Configuration Example
-
     {
         "default": {
             "StackName": "DefaultStackName",
@@ -63,9 +60,17 @@ These params, and which takes precedence if both are provided are listed below.
 * `StackPolicyURL` & `StackPolicyBody`. `StackPolicyURL` takes precedence.
 * `StackPolicyDuringUpdateURL` & `StackPolicyDuringUpdateBody`. `StackPolicyDuringUpdateURL` takes precedence.
 * `TemplateURL` & `TemplateBody`. `TemplateURL` takes precedence.
-* `OnFailure` & `DisableRollback`. `OnFailure` takes precedence.
 
 ## Changelog
+
+### v1.0.0
+Version 1.0.0 is a complete re-write of the tools inner workings.
+
+* All stack creation/updates are now managed via ChangeSets to reduce complexity.
+* Template validation has been added, it is also executed on dry run.
+* The cli is backwards compatible with stacks created using an earlier version and it has the same api.
+* Note that the new version requires a few additional IAM permissions for managing the ChangeSets.
+* The `create` & `createOrUpdate` commands have been deprecated and will be removed in 2.0.0. Use `update` for all operations except `delete`. 
 
 ### v0.2.1
 * Bugfix: Switched create vs update commands in createOrUpdate

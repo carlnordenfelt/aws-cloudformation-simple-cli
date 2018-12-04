@@ -1,45 +1,51 @@
 {
-  "name": "aws-cloudformation-simple-cli",
-  "author": "carl@bynordenfelt.se",
-  "description": "A simple command line tool for managing CloudFormation stacks",
-  "version": "0.2.1",
-  "license": "MIT",
-  "preferGlobal": true,
-  "scripts": {
-    "test": "make test"
-  },
-  "bin": {
-    "aws-cfn": "src/index.js"
-  },
-  "dependencies": {
-    "aws-sdk": "2.6.2",
-    "lodash": "4.15.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/carlnordenfelt/aws-cloudformation-simple-cli"
-  },
-  "keywords": [
-    "Amazon",
-    "AWS",
-    "CloudFormation",
-    "CLI",
-    "Command line"
-  ],
-  "issues": {
-    "url": "https://github.com/carlnordenfelt/aws-cloudformation-simple-cli/issues"
-  },
-  "homepage": "https://github.com/carlnordenfelt/aws-cloudformation-simple-cli",
-  "devDependencies": {
-    "chai": "3.5.0",
-    "eslint": "3.0.1",
-    "eslint-config-defaults": "9.0.0",
-    "eslint-plugin-filenames": "1.0.0",
-    "eslint-plugin-import": "1.10.2",
-    "istanbul": "0.4.4",
-    "mocha": "2.5.3",
-    "mockery": "1.7.0",
-    "should": "9.0.2",
-    "sinon": "1.17.4"
-  }
+    "name": "aws-cloudformation-simple-cli",
+    "author": "carl@bynordenfelt.se",
+    "description": "A simple command line tool for managing CloudFormation stacks",
+    "version": "2.0.0",
+    "license": "MIT",
+    "preferGlobal": true,
+    "scripts": {
+        "clean": "rm -rf node_modules && rm -rf *.zip",
+        "lint": "node_modules/.bin/eslint --max-warnings 0 src tests",
+        "test:unit": "LOG_4NJS_LEVEL=suppress nyc --all node_modules/.bin/_mocha ./tests/unit --recursive && npm run coverage:report",
+        "coverage": "nyc check-coverage --statement 100 --branches 100 --functions 100 --lines 100",
+        "coverage:report": "nyc report --reporter=html",
+        "test": "npm run lint && npm run test:unit && npm run coverage",
+        "package": "npm run clean && npm install && npm run test && npm prune --production && npm publish"
+    },
+    "bin": {
+        "aws-cfn": "src/index.js"
+    },
+    "dependencies": {
+        "aws-sdk": "^2.368.0",
+        "lodash": "^4.17.11",
+        "log4njs": "^1.0.2"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/carlnordenfelt/aws-cloudformation-simple-cli"
+    },
+    "keywords": [
+        "Amazon",
+        "AWS",
+        "CloudFormation",
+        "CLI",
+        "Command line"
+    ],
+    "issues": {
+        "url": "https://github.com/carlnordenfelt/aws-cloudformation-simple-cli/issues"
+    },
+    "homepage": "https://github.com/carlnordenfelt/aws-cloudformation-simple-cli",
+    "devDependencies": {
+        "chai": "^4.2.0",
+        "eslint": "5.9.0",
+        "eslint-config-defaults": "9.0.0",
+        "eslint-plugin-filenames": "1.3.2",
+        "eslint-plugin-import": "2.14.0",
+        "mocha": "^5.2.0",
+        "mockery": "^2.1.0",
+        "sinon": "^7.1.1",
+        "nyc": "^13.1.0"
+    }
 }

@@ -1,13 +1,11 @@
-'use strict';
-
-var expect = require('chai').expect;
-var mockery = require('mockery');
-var sinon = require('sinon');
+const expect  = require('chai').expect;
+const mockery = require('mockery');
+const sinon   = require('sinon');
 
 describe('FileHelper', function () {
-    var subject;
-    var accessSyncStub;
-    var readFileSyncStub;
+    let subject;
+    const accessSyncStub   = sinon.stub();
+    const readFileSyncStub = sinon.stub();
 
     before(function () {
         mockery.enable({
@@ -15,21 +13,18 @@ describe('FileHelper', function () {
             warnOnUnregistered: false
         });
 
-        accessSyncStub = sinon.stub();
-        readFileSyncStub = sinon.stub();
-
-        var fsStub = {
+        const fsStub = {
             accessSync: accessSyncStub,
             readFileSync: readFileSyncStub
         };
 
         mockery.registerMock('fs', fsStub);
-        subject = require('../../../src/lib/file-helper');
+        subject = require('../../../src/lib/read-file');
     });
     beforeEach(function () {
-        accessSyncStub.reset().resetBehavior();
+        accessSyncStub.reset();
         accessSyncStub.returns();
-        readFileSyncStub.reset().resetBehavior();
+        readFileSyncStub.reset();
         readFileSyncStub.returns(new Buffer('a string'));
     });
     after(function () {
@@ -39,15 +34,17 @@ describe('FileHelper', function () {
 
     describe('read', function () {
         it('should succeed', function (done) {
-            var contents = subject.read('file');
+            const contents = subject('file');
             expect(contents).to.equal('a string');
             done();
         });
         it('should fail', function (done) {
             accessSyncStub.throws(new Error('accessSyncStub'));
+
             function fn() {
-                subject.read('file');
+                subject('file');
             }
+
             expect(fn).to.throw('accessSyncStub');
             done();
         });

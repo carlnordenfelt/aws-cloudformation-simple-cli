@@ -1,30 +1,32 @@
-'use strict';
+const aws            = require('aws-sdk');
+const cloudFormation = new aws.CloudFormation({ apiVersion: '2010-05-15' });
+const configReader   = require('../config-reader');
+const log            = require('log4njs');
 
-var aws = require('aws-sdk');
-var cloudFormation = new aws.CloudFormation({ apiVersion: '2010-05-15' });
-var configReader = require('../config-reader');
+module.exports = async function (options) {
+    const config = configReader(options);
+    const params = buildParameters(config);
 
-module.exports = {
-    run: function run(options, callback) {
-        var config = configReader(options);
-        var params = buildParameters(config);
-        if (options.isDryRun()) {
-            console.log('Dry run mode');
-            console.log(params);
-            return callback(null, null);
-        }
-        console.log('Deleting stack', params.StackName);
-        cloudFormation.deleteStack(params, function (error, data) {
-            if (error) {
-                return callback(error);
-            }
-            if (options.shouldWait()) {
-                console.log('Waiting for stack deletion to complete...');
-                return cloudFormation.waitFor('stackDeleteComplete', params, callback);
-            }
-            callback(null, data);
-        });
+    if (options.isDryRun()) {
+        log.info('Dry run mode');
+        log.info('Parameters', params);
+        return;
     }
+
+    let response;
+    try {
+        log.info('Deleting stack', params.StackName);
+        response = await cloudFormation.deleteStack(params).promise();
+    } catch (error) {
+        throw error;
+    }
+
+    if (options.shouldWait()) {
+        log.info('Waiting for stack deletion to complete...');
+        response = await cloudFormation.waitFor('stackDeleteComplete', params).promise();
+    }
+
+    return response;
 };
 
 function buildParameters(config) {

@@ -1,13 +1,11 @@
-'use strict';
-
-var expect = require('chai').expect;
-var mockery = require('mockery');
-var sinon = require('sinon');
-var Options = require('../../../src/lib/options');
+const expect = require('chai').expect;
+const mockery = require('mockery');
+const sinon = require('sinon');
+const Options = require('../../../src/lib/options');
 
 describe('ConfigReader', function () {
-    var subject;
-    var readStub;
+    let subject;
+    const readStub = sinon.stub();
 
     before(function () {
         mockery.enable({
@@ -15,17 +13,11 @@ describe('ConfigReader', function () {
             warnOnUnregistered: false
         });
 
-        readStub = sinon.stub();
-
-        var fileHelperMock = {
-            read: readStub
-        };
-
-        mockery.registerMock('./file-helper', fileHelperMock);
+        mockery.registerMock('./read-file', readStub);
         subject = require('../../../src/lib/config-reader');
     });
     beforeEach(function () {
-        var config = {
+        const config = {
             'default': {
                 'StackName': 'DefaultStackName',
                 'Parameters': {
@@ -45,7 +37,7 @@ describe('ConfigReader', function () {
                 'TemplateURL': 'http://s3-bucket-url/cloudformation.template'
             }
         };
-        readStub.reset().resetBehavior();
+        readStub.reset();
         readStub.returns(new Buffer(JSON.stringify(config)));
     });
     after(function () {
@@ -54,8 +46,11 @@ describe('ConfigReader', function () {
     });
     describe('getConfig', function () {
         it('should succeed with defaults only', function (done) {
-            var options = new Options(['node', 'script', 'create', '--config-file', 'path/test.json', '--placeholder', '{ph1}=rh1', '--placeholder', '{ph2}=rh2']);
-            var config = subject(options);
+            const options = new Options([
+                'node', 'script', 'create', '--config-file',
+                'path/test.json', '--placeholder', '{ph1}=rh1', '--placeholder', '{ph2}=rh2'
+            ]);
+            const config = subject(options);
             expect(config.StackName).to.equal('DefaultStackName');
             expect(config.Parameters.MyTemplateParamKey).to.equal('MyTemplateParamValue');
             expect(config.Parameters.MyOtherTemplateParamKey).to.equal('MyOtherTemplateParamValue');
@@ -63,8 +58,8 @@ describe('ConfigReader', function () {
             done();
         });
         it('should succeed with environment overrides', function (done) {
-            var options = new Options(['node', 'script', 'create', '--environment', 'test', '--config-file', 'path/test.json']);
-            var config = subject(options);
+            const options = new Options(['node', 'script', 'update', '--environment', 'test', '--config-file', 'path/test.json']);
+            const config = subject(options);
             expect(config.StackName).to.equal('TestStackName');
             expect(config.Parameters.MyTemplateParamKey).to.equal('OverrideMyTemplateParamValue');
             expect(config.Parameters.MyOtherTemplateParamKey).to.equal('MyOtherTemplateParamValue');
@@ -81,8 +76,8 @@ describe('ConfigReader', function () {
                     'TemplateURL': 'http://s3-bucket-url/cloudformation.template'
                 }
             })));
-            var options = new Options(['node', 'script', 'create', '--environment', 'test', '--config-file', 'path/test.json']);
-            var config = subject(options);
+            const options = new Options(['node', 'script', 'update', '--environment', 'test', '--config-file', 'path/test.json']);
+            const config = subject(options);
             expect(config.StackName).to.equal('TestStackName');
             expect(config.Parameters.MyTemplateParamKey).to.equal('OverrideMyTemplateParamValue');
             expect(config.Parameters.MyOtherTemplateParamKey).to.equal(undefined);
@@ -92,7 +87,7 @@ describe('ConfigReader', function () {
         it('should fail without environment and no default', function (done) {
             readStub.returns(new Buffer(JSON.stringify({})));
             function fn() {
-                var options = new Options(['node', 'script', 'create', '--config-file', 'path/test.json']);
+                const options = new Options(['node', 'script', 'update', '--config-file', 'path/test.json']);
                 subject(options);
             }
 
@@ -101,11 +96,21 @@ describe('ConfigReader', function () {
         });
         it('should fail with invalid  environment', function (done) {
             function fn() {
-                var options = new Options(['node', 'script', 'create', '--environment', 'test2', '--config-file', 'path/test.json']);
+                const options = new Options(['node', 'script', 'update', '--environment', 'test2', '--config-file', 'path/test.json']);
                 subject(options);
             }
 
             expect(fn).to.throw('Environment not defined in config file');
+            done();
+        });
+        it('should fail if provided config is not valid JSON', function (done) {
+            readStub.throws(new Error('Bad JSON'));
+            function fn() {
+                const options = new Options(['node', 'script', 'update', '--config-file', 'path/test.json']);
+                subject(options);
+            }
+
+            expect(fn).to.throw('Bad JSON');
             done();
         });
     });
