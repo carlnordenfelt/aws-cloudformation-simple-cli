@@ -12,6 +12,11 @@ The intention is to provide a lightweight alternative that is very easy to get s
 ## Installation
     npm install -g aws-cloudformation-simple-cli
 
+## How to use
+For a complete list of arguments, run
+    
+    aws-cfn help
+
 ## Examples
     aws-cfn update --config-file path/to/local-config-file.json --placeholder {PH1}=RP1 --placeholder $PH2$=RP2 --wait false
     aws-cfn update --config-file path/to/local-config-file.json --dry-run true --environment test
@@ -63,6 +68,9 @@ These params, and which takes precedence if both are provided are listed below.
 * `TemplateURL` & `TemplateBody`. `TemplateURL` takes precedence.
 
 ## Changelog
+
+### v1.0.1
+* Fixed help command
 
 ### v1.0.0
 Version 1.0.0 is a complete re-write of the tools inner workings.
