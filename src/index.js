@@ -10,7 +10,7 @@ let providedOptions;
 try {
     providedOptions = new Options(process.argv);
 } catch (error) {
-    log.error('Invalid arguments', error);
+    log.error('Invalid arguments', error.message);
     usage();
     process.exit(1);
 }
