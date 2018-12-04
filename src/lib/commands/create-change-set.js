@@ -20,7 +20,7 @@ module.exports = async function (options) {
         return;
     }
 
-    let changeSet = await createChangeSet(params);
+    let changeSet = await createChangeSet(params, options.doForceCleanUp());
     if (!changeSet) {
         return;
     }
@@ -70,7 +70,7 @@ async function validateTemplate(params) {
     }
 }
 
-async function createChangeSet(params) {
+async function createChangeSet(params, forceCleanUp) {
     log.info('Creating new ChangeSet...');
     const changeSet = await cloudFormation.createChangeSet(params).promise();
     log.info('ChangeSet created, pending completion...', changeSet.Id);
@@ -78,19 +78,27 @@ async function createChangeSet(params) {
     try {
         await cloudFormation.waitFor('changeSetCreateComplete', { ChangeSetName: changeSet.Id }).promise();
     } catch (error) {
-        await attemptGracefulCleanUp(changeSet);
+        await attemptGracefulCleanUp(changeSet, forceCleanUp);
         return undefined;
     }
 
     return changeSet;
 }
 
-async function attemptGracefulCleanUp(changeSet) {
+async function attemptGracefulCleanUp(changeSet, forceCleanUp) {
     const describeChangeSet = await cloudFormation.describeChangeSet({ ChangeSetName: changeSet.Id }).promise();
-    if (describeChangeSet.Status === 'FAILED' && describeChangeSet.StatusReason.indexOf('didn\'t contain changes') > -1) {
-        log.info('ChangeSet contained no changes, deleting...');
-        await cloudFormation.deleteChangeSet({ ChangeSetName: changeSet.Id }).promise();
-        return;
+    /* istanbul ignore else */
+    if (describeChangeSet.Status === 'FAILED') {
+        if (describeChangeSet.StatusReason.indexOf('didn\'t contain changes') > -1
+            || describeChangeSet.StatusReason.indexOf('No updates are to be performed') > -1) {
+            log.info('ChangeSet contained no changes, deleting...');
+            await cloudFormation.deleteChangeSet({ ChangeSetName: changeSet.Id }).promise();
+            return;
+        } else if (forceCleanUp) {
+            log.error('ChangeSet creation failed: ' + describeChangeSet.StatusReason + '. Cleaning up...');
+            await cloudFormation.deleteChangeSet({ ChangeSetName: changeSet.Id }).promise();
+            return;
+        }
     }
 
     throw new Error('ChangeSet creation failed: ' + describeChangeSet.StatusReason + '. See CloudFormation for further details');

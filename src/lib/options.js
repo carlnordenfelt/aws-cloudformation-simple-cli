@@ -6,6 +6,7 @@ function Options(args) {
     this.command      = args[COMMAND_ARG_POS];
     this.dryRun       = false;
     this.wait         = true;
+    this.forceCleanUp = false;
     this.environment  = undefined;
     this.configFile   = undefined;
     this.placeholders = {};
@@ -19,6 +20,9 @@ function Options(args) {
                 break;
             case 'wait':
                 this.wait = value === 'true';
+                break;
+            case 'force-clean-up':
+                this.forceCleanUp = value === 'true';
                 break;
             case 'environment':
                 this.environment = value;
@@ -55,6 +59,7 @@ Options.getValidOptions = function () {
         'environment': { description: 'String. Environment name for switching between config sets.', required: false },
         'dry-run': { description: 'Boolean. Preview CloudFormation request. Default false', required: false },
         'wait': { description: 'Boolean. Wait for resources to create before continuing. Default true', required: false },
+        'force-clean-up': { description: 'Boolean. Remove failed change sets automatically. Default false', required: false },
         'placeholder': { description: 'String array. Placeholders for replacement of values in the config.json file. ' +
             'Syntax: PlaceholderString=ReplacementValue', required: false
         },
@@ -83,6 +88,10 @@ Options.prototype.isDryRun = function () {
 
 Options.prototype.shouldWait = function () {
     return this.wait;
+};
+
+Options.prototype.doForceCleanUp = function () {
+    return this.forceCleanUp;
 };
 
 Options.prototype.validate = function validate() {

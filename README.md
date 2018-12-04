@@ -69,8 +69,9 @@ These params, and which takes precedence if both are provided are listed below.
 
 ## Changelog
 
-### v1.0.1
+### v1.1.0
 * Fixed help command
+* Added `--force-clean-up` argument
 
 ### v1.0.0
 Version 1.0.0 is a complete re-write of the tools inner workings.

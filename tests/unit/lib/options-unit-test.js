@@ -12,6 +12,7 @@ describe('Options', function () {
                 'node', 'script', 'create',
                 '--dry-run', 'true',
                 '--wait', 'false',
+                '--force-clean-up', 'true',
                 '--environment', 'test',
                 '--config-file', 'path/test.json',
                 '--placeholder', 'ph1=rp1',
@@ -20,6 +21,7 @@ describe('Options', function () {
             expect(options.getCommand()).to.equal('create');
             expect(options.isDryRun()).to.equal(true);
             expect(options.shouldWait()).to.equal(false);
+            expect(options.doForceCleanUp()).to.equal(true);
             expect(options.getEnvironment()).to.equal('test');
             expect(options.getConfigFile()).to.equal('path/test.json');
             expect(Object.keys(options.getPlaceholders()).length).to.equal(2);

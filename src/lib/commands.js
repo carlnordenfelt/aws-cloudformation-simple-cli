@@ -4,6 +4,7 @@ const usage           = require('./usage');
 
 /* eslint-disable no-fallthrough */
 module.exports = async function (options) {
+    /* eslint-disable default-case */
     switch (options.getCommand()) {
         /*istanbul ignore next */
         case 'create':

@@ -225,6 +225,58 @@ describe('Change Set', function () {
                 done();
             });
         });
+        it('should clean up if change set contains no changes - part 2', function (done) {
+            waitForStub.returns({
+                promise: () => {
+                    throw new Error('Error');
+                }
+            });
+            describeChangeSetStub.returns({
+                promise: () => {
+                    return {
+                        Status: 'FAILED',
+                        StatusReason: 'No updates are to be performed'
+                    };
+                }
+            });
+            const options = new Options(['node', 'script', 'update', '--config-file', 'dummy']);
+            subject(options).then(result => {
+                expect(result).to.equal(undefined);
+                expect(describeStacksStub.calledOnce).to.equal(true);
+                expect(validateTemplateStub.calledOnce).to.equal(true);
+                expect(createChangeSetStub.calledOnce).to.equal(true);
+                expect(describeChangeSetStub.calledOnce).to.equal(true);
+                expect(waitForStub.calledOnce).to.equal(true);
+                expect(deleteChangeSetStub.calledOnce).to.equal(true);
+                done();
+            });
+        });
+        it('should clean up if force-clean-up is set', function (done) {
+            waitForStub.returns({
+                promise: () => {
+                    throw new Error('Error');
+                }
+            });
+            describeChangeSetStub.returns({
+                promise: () => {
+                    return {
+                        Status: 'FAILED',
+                        StatusReason: 'Some other reason'
+                    };
+                }
+            });
+            const options = new Options(['node', 'script', 'update', '--config-file', 'dummy', '--force-clean-up', 'true']);
+            subject(options).then(result => {
+                expect(result).to.equal(undefined);
+                expect(describeStacksStub.calledOnce).to.equal(true);
+                expect(validateTemplateStub.calledOnce).to.equal(true);
+                expect(createChangeSetStub.calledOnce).to.equal(true);
+                expect(describeChangeSetStub.calledOnce).to.equal(true);
+                expect(waitForStub.calledOnce).to.equal(true);
+                expect(deleteChangeSetStub.calledOnce).to.equal(true);
+                done();
+            });
+        });
         it('should fail if other error', function (done) {
             waitForStub.returns({
                 promise: () => {
