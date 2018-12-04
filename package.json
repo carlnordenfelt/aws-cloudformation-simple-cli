@@ -2,17 +2,17 @@
     "name": "aws-cloudformation-simple-cli",
     "author": "carl@bynordenfelt.se",
     "description": "A simple command line tool for managing CloudFormation stacks",
-    "version": "2.0.0",
+    "version": "1.0.0",
     "license": "MIT",
     "preferGlobal": true,
     "scripts": {
-        "clean": "rm -rf node_modules && rm -rf *.zip",
+        "clean": "rm -rf node_modules",
         "lint": "node_modules/.bin/eslint --max-warnings 0 src tests",
         "test:unit": "LOG_4NJS_LEVEL=suppress nyc --all node_modules/.bin/_mocha ./tests/unit --recursive && npm run coverage",
         "coverage": "nyc check-coverage --statement 100 --branches 100 --functions 100 --lines 100 && nyc report --reporter=html",
         "coverage:report": "nyc report --reporter=text-lcov | coveralls",
         "test": "npm run lint && npm run test:unit",
-        "package": "npm run clean && npm install && npm run test && npm prune --production && npm publish"
+        "package": "npm run clean && npm i && npm run test && npm publish"
     },
     "bin": {
         "aws-cfn": "src/index.js"
