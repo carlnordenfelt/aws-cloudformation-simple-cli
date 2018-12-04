@@ -8,10 +8,10 @@
     "scripts": {
         "clean": "rm -rf node_modules && rm -rf *.zip",
         "lint": "node_modules/.bin/eslint --max-warnings 0 src tests",
-        "test:unit": "LOG_4NJS_LEVEL=suppress nyc --all node_modules/.bin/_mocha ./tests/unit --recursive && npm run coverage:report",
-        "coverage": "nyc check-coverage --statement 100 --branches 100 --functions 100 --lines 100",
-        "coverage:report": "nyc report --reporter=html",
-        "test": "npm run lint && npm run test:unit && npm run coverage",
+        "test:unit": "LOG_4NJS_LEVEL=suppress nyc --all node_modules/.bin/_mocha ./tests/unit --recursive && npm run coverage",
+        "coverage": "nyc check-coverage --statement 100 --branches 100 --functions 100 --lines 100 && nyc report --reporter=html",
+        "coverage:report": "nyc report --reporter=text-lcov | coveralls",
+        "test": "npm run lint && npm run test:unit",
         "package": "npm run clean && npm install && npm run test && npm prune --production && npm publish"
     },
     "bin": {
@@ -39,13 +39,14 @@
     "homepage": "https://github.com/carlnordenfelt/aws-cloudformation-simple-cli",
     "devDependencies": {
         "chai": "^4.2.0",
+        "coveralls": "^3.0.2",
         "eslint": "5.9.0",
         "eslint-config-defaults": "9.0.0",
         "eslint-plugin-filenames": "1.3.2",
         "eslint-plugin-import": "2.14.0",
         "mocha": "^5.2.0",
         "mockery": "^2.1.0",
-        "sinon": "^7.1.1",
-        "nyc": "^13.1.0"
+        "nyc": "^13.1.0",
+        "sinon": "^7.1.1"
     }
 }
