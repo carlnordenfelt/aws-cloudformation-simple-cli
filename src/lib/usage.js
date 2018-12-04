@@ -9,5 +9,5 @@ module.exports = function usage() {
     Object.keys(options.getValidOptions()).forEach(function (optionKey) {
         log.info('\t' + optionKey + ': ' + options.getValidOptions()[optionKey].description);
     });
-    process.exit(1);
+    return;
 };

@@ -62,11 +62,11 @@ describe('Commands', function () {
         });
     });
 
-    describe('invalid command', function () {
-        it('should fail on invalid command', function (done) {
-            const options = new Options(['node', 'script', 'help']);
-            subject(options).catch(error => {
-                expect(error.message).to.equal('Invalid command provided: help');
+    describe('help', function () {
+        it('should succeed', function (done) {
+            const options = new Options(['node', 'script', 'help', '--config-file', 'dummy']);
+            subject(options).then(result => {
+                expect(result).to.equal(undefined);
                 done();
             });
         });

@@ -45,7 +45,7 @@ Options.getValidCommands = function () {
 };
 
 Options.getValidLegacyCommands = function () {
-    return ['create', 'createOrUpdate', 'help'];
+    return ['create', 'createOrUpdate'];
 };
 
 /* istanbul ignore next */

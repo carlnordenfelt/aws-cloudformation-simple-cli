@@ -25,7 +25,7 @@ describe('FileHelper', function () {
         accessSyncStub.reset();
         accessSyncStub.returns();
         readFileSyncStub.reset();
-        readFileSyncStub.returns(new Buffer('a string'));
+        readFileSyncStub.returns(Buffer.from('a string'));
     });
     after(function () {
         mockery.deregisterAll();

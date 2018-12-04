@@ -38,7 +38,7 @@ describe('ConfigReader', function () {
             }
         };
         readStub.reset();
-        readStub.returns(new Buffer(JSON.stringify(config)));
+        readStub.returns(Buffer.from(JSON.stringify(config)));
     });
     after(function () {
         mockery.deregisterAll();
@@ -67,7 +67,7 @@ describe('ConfigReader', function () {
             done();
         });
         it('should succeed with environment overrides only', function (done) {
-            readStub.returns(new Buffer(JSON.stringify({
+            readStub.returns(Buffer.from(JSON.stringify({
                 'test': {
                     'StackName': 'TestStackName',
                     'Parameters': {
@@ -85,7 +85,7 @@ describe('ConfigReader', function () {
             done();
         });
         it('should fail without environment and no default', function (done) {
-            readStub.returns(new Buffer(JSON.stringify({})));
+            readStub.returns(Buffer.from(JSON.stringify({})));
             function fn() {
                 const options = new Options(['node', 'script', 'update', '--config-file', 'path/test.json']);
                 subject(options);

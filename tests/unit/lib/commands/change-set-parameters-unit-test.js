@@ -18,7 +18,7 @@ describe('Change Set Parameters', function () {
     });
     beforeEach(function () {
         readStub.reset();
-        readStub.returns(new Buffer(JSON.stringify({})));
+        readStub.returns(Buffer.from(JSON.stringify({})));
 
         config = {
             StackName: 'StackName',

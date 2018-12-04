@@ -15,7 +15,5 @@ module.exports = async function (options) {
             return await deleteStack(options);
         case 'help':
             return usage();
-        default:
-            throw new Error('Invalid command provided: ' + options.getCommand());
     }
 };

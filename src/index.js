@@ -20,7 +20,6 @@ commands(providedOptions)
         if (response) {
             log.info('Response', response);
         }
-        log.info('Update completed');
     })
     .catch(error => {
         log.error('Error during execution', error);
