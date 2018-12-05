@@ -69,6 +69,9 @@ These params, and which takes precedence if both are provided are listed below.
 
 ## Changelog
 
+### v1.1.1
+* Exit with error code on error
+
 ### v1.1.0
 * Fixed help command
 * Added `--force-clean-up` argument
