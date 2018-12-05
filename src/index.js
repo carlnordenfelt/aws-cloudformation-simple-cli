@@ -23,4 +23,5 @@ commands(providedOptions)
     })
     .catch(error => {
         log.error('Error during execution', error);
+        process.exit(1);
     });
