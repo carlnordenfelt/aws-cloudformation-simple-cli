@@ -1,0 +1,18 @@
+{
+    "default": {
+        "StackName": "Dummy",
+        "TemplateBody": "./test.yaml",
+        "Capabilities": ["CAPABILITY_IAM"],
+        "Parameters": {
+            "ApiName": "Default Api Name",
+            "TopicName1": "TopicName1"
+        }
+    },
+    "Test": {
+
+        "Parameters": {
+            "ApiName": "Test Api Name",
+            "TopicName1": "TestName1"
+        }
+    }
+}

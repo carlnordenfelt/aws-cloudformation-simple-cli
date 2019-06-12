@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: 'test change sets'
+Transform: "AWS::Serverless-2016-10-31"
+Parameters:
+  ApiName:
+    Type: String
+  TopicName1:
+    Type: String
+  TopicName2:
+    Type: String
+    Default: MySecondTopic
+Resources:
+  DummyServer:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      TopicName: !Ref TopicName1
+  DummyServer2:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      TopicName: !Ref TopicName2
+  Api:
+    Type: "AWS::Serverless::Api"
+    Properties:
+      Name: !Ref ApiName
+      StageName: "api"
+  ApiLambdaFunction:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      Runtime: "nodejs8.10"
+      Handler: "src/api.handler"
+      InlineCode: 'Hello'
+      Events:
+        ApiTrigger:
+          Type: "Api"
+          Properties:
+            Path: "/"
+            Method: "GET"
+            RestApiId: !Ref "Api"
+  String2:
+    Type: Custom::StrnigGenerator
+    Properties:
+      ServiceToken: arn:aws:lambda:eu-west-1:287265878868:function:CustomResources
+      Length: 256
+      _NoEcho: true
+
+  SecureParam:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: MyNewSecret
+      Type: String
+      Value: !GetAtt String2.String
