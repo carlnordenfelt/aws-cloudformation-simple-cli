@@ -18,7 +18,7 @@
         "aws-cfn": "src/index.js"
     },
     "dependencies": {
-        "aws-sdk": "^2.368.0",
+        "aws-sdk": "^2.814.0",
         "lodash": "^4.17.11",
         "log4njs": "^1.0.2"
     },
